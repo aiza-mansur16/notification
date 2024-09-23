@@ -1,0 +1,46 @@
+openapi: 3.0.1
+info:
+  title: OpenAPI definition
+  version: v0
+servers:
+- url: http://localhost:58854
+  description: Generated server url
+paths:
+  /api/notifications/mail:
+    post:
+      tags:
+      - notification-controller
+      summary: Send email notification
+      description: Sends an email notification to the specified recipient
+      operationId: sendMailNotification
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/EmailInfoDto"
+        required: true
+      responses:
+        "204":
+          description: Mail sent successfully
+        "400":
+          description: Invalid request
+        "500":
+          description: Internal server error
+components:
+  schemas:
+    EmailInfoDto:
+      required:
+      - message
+      - recipientEmail
+      - subject
+      type: object
+      properties:
+        recipientEmail:
+          type: string
+          description: recipient email
+        subject:
+          type: string
+          description: subject of mail
+        message:
+          type: string
+          description: message of mail
