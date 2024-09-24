@@ -14,3 +14,6 @@ spring:
             enable: true
 server:
   port: ${HOST_PORT}
+logging:
+  level:
+    root: WARN

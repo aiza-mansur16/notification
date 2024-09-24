@@ -23,7 +23,9 @@ public class EmailNotificationService implements Notification<EmailInfoDto> {
 
     @Override
     public void sendNotification(EmailInfoDto notificationInfoDto) {
-        log.info("Sending email notification to: {}", notificationInfoDto.recipientEmail());
+        if (log.isDebugEnabled()) {
+            log.debug("Sending email notification to: {}", notificationInfoDto.recipientEmail());
+        }
         try {
             var mailMessage = new SimpleMailMessage();
             mailMessage.setFrom(senderEmail);
@@ -33,11 +35,15 @@ public class EmailNotificationService implements Notification<EmailInfoDto> {
 
             mailSender.send(mailMessage);
 
-            log.info("Email notification sent successfully to: {}", notificationInfoDto.recipientEmail());
+            if (log.isDebugEnabled()) {
+                log.debug("Email notification sent successfully to: {}", notificationInfoDto.recipientEmail());
+            }
 
         } catch (Exception e) {
-            log.warn("Error sending email notification to: {}", notificationInfoDto.recipientEmail());
-            throw new EmailNotSentException("Error sending email notification to: "+ notificationInfoDto.recipientEmail());
+            if (log.isWarnEnabled()) {
+                log.warn("Error sending email notification to: {}", notificationInfoDto.recipientEmail());
+            }
+            throw new EmailNotSentException("Error sending email notification to: "+ notificationInfoDto.recipientEmail(), e);
         }
     }
 }

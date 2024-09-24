@@ -76,6 +76,28 @@
 					</excludes>
 				</configuration>
 			</plugin>
+
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-pmd-plugin</artifactId>
+				<version>3.25.0</version>
+				<configuration>
+					<inputEncoding>utf-8</inputEncoding>
+					<minimumTokens>100</minimumTokens>
+					<targetJdk>17</targetJdk>
+					<excludes>
+						<exclude>**/*Bean.java</exclude>
+						<exclude>**/generated/*.java</exclude>
+					</excludes>
+					<excludeRoots>
+						<excludeRoot>target/generated-sources/stubs</excludeRoot>
+					</excludeRoots>
+					<rulesets>
+						<ruleset>rulesets/java/quickstart.xml</ruleset>
+					</rulesets>
+				</configuration>
+			</plugin>
+
 		</plugins>
 	</build>
 
