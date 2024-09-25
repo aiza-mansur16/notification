@@ -14,3 +14,37 @@ spring:
             enable: true
 server:
   port: ${HOST_PORT}
+logging:
+  level:
+    root: WARN
+management:
+  endpoint:
+    health:
+      show-details: always
+  endpoints:
+    web:
+      exposure:
+        include: health
+  health:
+    circuitbreakers:
+      enabled: true
+resilience4j:
+  circuitbreaker:
+    instances:
+      EmailService:
+        record-exceptions: org.springframework.mail.MailException
+        registerHealthIndicator: true
+        eventConsumerBufferSize: 10
+        failureRateThreshold: 50
+        minimumNumberOfCalls: 5
+        automaticTransitionFromOpenToHalfOpenEnabled: true
+        waitDurationInOpenState: 5s
+        permittedNumberOfCallsInHalfOpenState: 3
+        slidingWindowSize: 10
+        slidingWindowType: COUNT_BASED
+  retry:
+    instances:
+      RetrySendEmail:
+        record-exceptions: org.springframework.mail.MailException
+        maxRetryAttempts: 3
+        waitDuration: 500ms

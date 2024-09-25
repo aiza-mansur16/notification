@@ -1,0 +1,40 @@
+{
+	"info": {
+		"_postman_id": "d7050eff-bc27-4d23-a624-56a5a2ae3c81",
+		"name": "Notification",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "38535958"
+	},
+	"item": [
+		{
+			"name": "send email notification",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"recipientEmail\": \"joh.doe@email.com\",\r\n    \"subject\": \"Test Alert\",\r\n    \"message\": \"Test alert message\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "localhost:{{NOTF_PORT}}/api/v1/notifications/mail",
+					"host": [
+						"localhost"
+					],
+					"port": "{{NOTF_PORT}}",
+					"path": [
+						"api",
+						"v1",
+						"notifications",
+						"mail"
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}

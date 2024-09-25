@@ -2,7 +2,7 @@ package com.example.notification;
 
 import com.example.notification.model.EmailInfoDto;
 import com.example.notification.service.EmailNotificationService;
-import com.example.notification.utils.model.EmailNotSentException;
+import com.example.notification.utils.model.exception.EmailNotSentException;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -39,7 +39,7 @@ class NotificationControllerTest {
                 "Budget Exceed Alert",
                 "Your expenses have exceeded the budget limit.");
         var response = testRestTemplate.exchange(
-                "http://localhost:" + port + "/api/notifications/mail",
+                "http://localhost:" + port + "/api/v1/notifications/mail",
                 HttpMethod.POST,
                 new HttpEntity<>(emailInfoDto),
                 Void.class
@@ -53,7 +53,7 @@ class NotificationControllerTest {
                 .when(emailNotificationService).sendNotification(any(EmailInfoDto.class));
         try {
             testRestTemplate.exchange(
-                    "http://localhost:" + port + "/api/notifications/mail",
+                    "http://localhost:" + port + "/api/v1/notifications/mail",
                     HttpMethod.POST,
                     new HttpEntity<>(new EmailInfoDto(
                             "john.doe@gmail.com",
