@@ -18,36 +18,36 @@ import org.springframework.web.bind.annotation.RestController;
 @Validated
 public class NotificationController {
 
-    private final EmailNotificationService emailNotificationService;
+  private final EmailNotificationService emailNotificationService;
 
-    public NotificationController(EmailNotificationService emailNotificationService) {
-        this.emailNotificationService = emailNotificationService;
-    }
+  public NotificationController(EmailNotificationService emailNotificationService) {
+    this.emailNotificationService = emailNotificationService;
+  }
 
-    @Operation(
-            summary = "Send email notification",
-            description = "Sends an email notification to the specified recipient",
-            responses = {
-                    @ApiResponse(
-                            responseCode = "204",
-                            description = "Mail sent successfully"
-                    ),
-                    @ApiResponse(
-                            responseCode = "400",
-                            description = "Invalid request"
-                    ),
-                    @ApiResponse(
-                            responseCode = "500",
-                            description = "Internal server error"
-                    )
-            }
-    )
-    @PostMapping(value = "/mail",
-            produces = "application/json",
-            consumes = "application/json"
-    )
-    public ResponseEntity<Void> sendMailNotification(@RequestBody @Valid EmailInfoDto emailInfoDto) {
-        emailNotificationService.sendNotification(emailInfoDto);
-        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
-    }
+  @Operation(
+      summary = "Send email notification",
+      description = "Sends an email notification to the specified recipient",
+      responses = {
+          @ApiResponse(
+              responseCode = "204",
+              description = "Mail sent successfully"
+          ),
+          @ApiResponse(
+              responseCode = "400",
+              description = "Invalid request"
+          ),
+          @ApiResponse(
+              responseCode = "500",
+              description = "Internal server error"
+          )
+      }
+  )
+  @PostMapping(value = "/mail",
+      produces = "application/json",
+      consumes = "application/json"
+  )
+  public ResponseEntity<Void> sendMailNotification(@RequestBody @Valid EmailInfoDto emailInfoDto) {
+    emailNotificationService.sendNotification(emailInfoDto);
+    return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+  }
 }

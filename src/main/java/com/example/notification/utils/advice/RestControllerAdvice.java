@@ -15,19 +15,19 @@ import java.util.List;
 @Component
 public class RestControllerAdvice {
 
-    @ExceptionHandler(CallNotPermittedException.class)
-    public ResponseEntity<Object> handleCallNotPermittedException(CallNotPermittedException exception) {
-        var error = new Error();
-        error.setStatusCode(HttpStatus.INTERNAL_SERVER_ERROR);
-        error.setMessages(List.of("External service is unavailable"));
-        return new ResponseEntity<>(new ResponseEnvelope<>(null, error, null), HttpStatus.INTERNAL_SERVER_ERROR);
-    }
+  @ExceptionHandler(CallNotPermittedException.class)
+  public ResponseEntity<Object> handleCallNotPermittedException(CallNotPermittedException exception) {
+    var error = new Error();
+    error.setStatusCode(HttpStatus.INTERNAL_SERVER_ERROR);
+    error.setMessages(List.of("External service is unavailable"));
+    return new ResponseEntity<>(new ResponseEnvelope<>(null, error, null), HttpStatus.INTERNAL_SERVER_ERROR);
+  }
 
-    @ExceptionHandler(Exception.class)
-    public ResponseEntity<Object> handleGeneralException(Exception exception) {
-        var error = new Error();
-        error.setStatusCode(HttpStatus.INTERNAL_SERVER_ERROR);
-        error.setMessages(List.of(exception.getMessage()));
-        return new ResponseEntity<>(new ResponseEnvelope<>(null, error, null), HttpStatus.INTERNAL_SERVER_ERROR);
-    }
+  @ExceptionHandler(Exception.class)
+  public ResponseEntity<Object> handleGeneralException(Exception exception) {
+    var error = new Error();
+    error.setStatusCode(HttpStatus.INTERNAL_SERVER_ERROR);
+    error.setMessages(List.of(exception.getMessage()));
+    return new ResponseEntity<>(new ResponseEnvelope<>(null, error, null), HttpStatus.INTERNAL_SERVER_ERROR);
+  }
 }

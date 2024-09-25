@@ -15,43 +15,43 @@ import org.springframework.stereotype.Service;
 @Service
 public class EmailNotificationService implements Notification<EmailInfoDto> {
 
-    private final JavaMailSender mailSender;
+  private final JavaMailSender mailSender;
 
-    @Value("${spring.mail.username}")
-    private String senderEmail;
+  @Value("${spring.mail.username}")
+  private String senderEmail;
 
-    public EmailNotificationService(JavaMailSender mailSender) {
-        this.mailSender = mailSender;
+  public EmailNotificationService(JavaMailSender mailSender) {
+    this.mailSender = mailSender;
+  }
+
+  @CircuitBreaker(name = "EmailService")
+  @Retry(name = "RetrySendEmail")
+  @Override
+  public void sendNotification(EmailInfoDto notificationInfoDto) {
+    if (log.isDebugEnabled()) {
+      log.debug("Sending email notification to: {}", notificationInfoDto.recipientEmail());
     }
+    try {
+      var mailMessage = new SimpleMailMessage();
+      mailMessage.setFrom(senderEmail);
+      mailMessage.setTo(notificationInfoDto.recipientEmail());
+      mailMessage.setSubject(notificationInfoDto.subject());
+      mailMessage.setText(notificationInfoDto.message());
 
-    @CircuitBreaker(name = "EmailService")
-    @Retry(name = "RetrySendEmail")
-    @Override
-    public void sendNotification(EmailInfoDto notificationInfoDto) {
-        if (log.isDebugEnabled()) {
-            log.debug("Sending email notification to: {}", notificationInfoDto.recipientEmail());
-        }
-        try {
-            var mailMessage = new SimpleMailMessage();
-            mailMessage.setFrom(senderEmail);
-            mailMessage.setTo(notificationInfoDto.recipientEmail());
-            mailMessage.setSubject(notificationInfoDto.subject());
-            mailMessage.setText(notificationInfoDto.message());
+      mailSender.send(mailMessage);
 
-            mailSender.send(mailMessage);
+      if (log.isDebugEnabled()) {
+        log.debug("Email notification sent successfully to: {}", notificationInfoDto.recipientEmail());
+      }
 
-            if (log.isDebugEnabled()) {
-                log.debug("Email notification sent successfully to: {}", notificationInfoDto.recipientEmail());
-            }
-
-        } catch (MailException e) {
-            throw e;
-        } catch (Exception e) {
-            if (log.isWarnEnabled()) {
-                log.warn("Error sending email notification to: {}", notificationInfoDto.recipientEmail());
-            }
-            throw new EmailNotSentException("Error sending email notification to: "
-                    + notificationInfoDto.recipientEmail(), e);
-        }
+    } catch (MailException e) {
+      throw e;
+    } catch (Exception e) {
+      if (log.isWarnEnabled()) {
+        log.warn("Error sending email notification to: {}", notificationInfoDto.recipientEmail());
+      }
+      throw new EmailNotSentException("Error sending email notification to: "
+          + notificationInfoDto.recipientEmail(), e);
     }
+  }
 }
