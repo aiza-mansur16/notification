@@ -42,3 +42,13 @@ This will generate the documentation at path:
 ```
 src\main\resources\openapi\notification-specification.yaml
 ```
+
+## Postman Collection ##
+Postman collection for notification service can be found at:
+```
+src\main\resources\postman\notification-postman-collection.json
+```
+To run the APIs in collection add in global environment the following variable value
+```
+NOTF_PORT -> port on which notification service is running
+```
