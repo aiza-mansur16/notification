@@ -14,8 +14,7 @@ import org.springframework.test.context.ActiveProfiles;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.doThrow;
-import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.*;
 
 
 @SpringBootTest
@@ -40,8 +39,9 @@ class EmailNotificationServiceTest {
         doThrow(new MailSendException("Mail server not available"))
                 .when(mailSender).send(any(SimpleMailMessage.class));
         var emailInfoDto = new EmailInfoDto("test@example.com", "Test Subject", "Test Message");
-        var exception = assertThrows(Exception.class, () -> emailNotificationService.sendNotification(emailInfoDto));
-        assertEquals("Error sending email notification to: test@example.com", exception.getMessage());
-        verify(mailSender).send(any(SimpleMailMessage.class));
+        var exception = assertThrows(MailSendException.class, () -> emailNotificationService.sendNotification(emailInfoDto));
+        assertEquals("Mail server not available", exception.getMessage());
+        //retry will call it 3 times
+        verify(mailSender, times(3)).send(any(SimpleMailMessage.class));
     }
 }

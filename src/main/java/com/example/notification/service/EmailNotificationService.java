@@ -1,9 +1,12 @@
 package com.example.notification.service;
 
 import com.example.notification.model.EmailInfoDto;
-import com.example.notification.utils.model.EmailNotSentException;
+import com.example.notification.utils.model.exception.EmailNotSentException;
+import io.github.resilience4j.circuitbreaker.annotation.CircuitBreaker;
+import io.github.resilience4j.retry.annotation.Retry;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.mail.MailException;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.stereotype.Service;
@@ -21,6 +24,8 @@ public class EmailNotificationService implements Notification<EmailInfoDto> {
         this.mailSender = mailSender;
     }
 
+    @CircuitBreaker(name = "EmailService")
+    @Retry(name = "RetrySendEmail")
     @Override
     public void sendNotification(EmailInfoDto notificationInfoDto) {
         if (log.isDebugEnabled()) {
@@ -39,11 +44,14 @@ public class EmailNotificationService implements Notification<EmailInfoDto> {
                 log.debug("Email notification sent successfully to: {}", notificationInfoDto.recipientEmail());
             }
 
+        } catch (MailException e) {
+            throw e;
         } catch (Exception e) {
             if (log.isWarnEnabled()) {
                 log.warn("Error sending email notification to: {}", notificationInfoDto.recipientEmail());
             }
-            throw new EmailNotSentException("Error sending email notification to: "+ notificationInfoDto.recipientEmail(), e);
+            throw new EmailNotSentException("Error sending email notification to: "
+                    + notificationInfoDto.recipientEmail(), e);
         }
     }
 }

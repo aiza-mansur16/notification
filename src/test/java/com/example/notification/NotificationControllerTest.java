@@ -2,7 +2,7 @@ package com.example.notification;
 
 import com.example.notification.model.EmailInfoDto;
 import com.example.notification.service.EmailNotificationService;
-import com.example.notification.utils.model.EmailNotSentException;
+import com.example.notification.utils.model.exception.EmailNotSentException;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;

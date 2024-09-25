@@ -3,7 +3,7 @@ info:
   title: OpenAPI definition
   version: v0
 servers:
-- url: http://localhost:55784
+- url: http://localhost:58896
   description: Generated server url
 paths:
   /api/v1/notifications/mail:

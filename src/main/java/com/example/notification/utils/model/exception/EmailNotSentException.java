@@ -1,4 +1,4 @@
-package com.example.notification.utils.model;
+package com.example.notification.utils.model.exception;
 
 public class EmailNotSentException extends RuntimeException {
 
