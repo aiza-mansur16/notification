@@ -20,7 +20,7 @@ SENDER_PASS -> smtp password of person who will send email notification (Refer t
 To successfully send email notification you will need smtp password. If you do not have one, you can generate by 
 following the steps mentioned below:
 ```
-1. Login to Gamil account
+1. Login to Gmail account
 2. Go to Manage your Google Account
 3. Go to Security
 4. Search for App passwords and go there
